@@ -1,16 +1,20 @@
-const WebSocket = require('ws');
-const port = process.env.PORT || 8080;
+import { WebSocketServer } from "ws";
 
-const wss = new WebSocket.Server({ port: port });
+const port = process.env.PORT || 3000;
 
-wss.on('connection', function connection(ws) {
-  console.log("Client connected");
+const wss = new WebSocketServer({ port });
 
-  ws.on('message', function incoming(message) {
-    console.log("Received:", message);
-  });
+wss.on("connection", (ws) => {
+    console.log("Client connected");
 
-  ws.send("Connected to WebSocket Server");
+    ws.on("message", (message) => {
+        console.log("Received:", message.toString());
+        ws.send("Server echo: " + message.toString());
+    });
+
+    ws.on("close", () => {
+        console.log("Client disconnected");
+    });
 });
 
-console.log("WebSocket server running on port", port);
+console.log("WebSocket server running on port " + port);
