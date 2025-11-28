@@ -1,16 +1,16 @@
-import http from "http";
-import { WebSocketServer } from "ws";
+const http = require("http");
+const WebSocket = require("ws");
 
 const port = process.env.PORT || 3000;
 
-// HTTP server minimal untuk Railway
+// HTTP server supaya Railway tidak crash
 const server = http.createServer((req, res) => {
   res.writeHead(200);
   res.end("WebSocket server is running.");
 });
 
-// Buat WebSocket server di atas HTTP server
-const wss = new WebSocketServer({ server });
+// Buat WebSocket di atas HTTP server
+const wss = new WebSocket.Server({ server });
 
 wss.on("connection", (ws) => {
   console.log("Client connected");
@@ -25,7 +25,7 @@ wss.on("connection", (ws) => {
   });
 });
 
-// Jalankan HTTP + WS server
+// Mulai server
 server.listen(port, () => {
   console.log("Server running on port " + port);
 });
